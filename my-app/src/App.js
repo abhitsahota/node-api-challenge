@@ -1,26 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
+import CardItem from './Card'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default function App () {
+
+    const [list, setList] = useState([])
+
+    useEffect(() => {
+        axios
+        .get('http://localhost:3030/api/projects')
+        .then(r => {
+            console.log(r.data.r)
+            setList(r.data.r)
+        })
+        .catch(e => {
+            console.log('error in the server call', e)
+        })
+    }, [] )
+
+    return (
+        <>
+        {Object.values(list).map((keyName, index) => {
+            return (
+                <CardItem key={index} name={keyName.name} description={keyName.description} completed={keyName.completed} />
+            )
+        }
+        )}
+        </>
+
+    )
 }
-
-export default App;
