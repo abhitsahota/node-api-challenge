@@ -66,12 +66,14 @@ router.delete('/:id', validateId, (req, res, next) => {
 
 router.put('/:id', validateId, (req, res, next) => {
     const { id } = req.params
-    const { name, description } = req.body
+    // const { name, description } = req.body
 
     if ( req.body ) {
-        projectMethods.insert(id, req.body)
+        projectMethods.update(id, req.body)
         .then(r => res.status(200).json({ msg: "Request successful, see actions", r}))
-        .catch(e => res.status(500).json({ msg: 'Whoops, something went wrong on our side'}))
+        .catch(e => {
+            console.log(e)
+            res.status(500).json({ msg: 'Whoops, something went wrong on our side'})})
     } else {
         res.status(400).json({ msg: 'A name, and a description is required'})
     }
